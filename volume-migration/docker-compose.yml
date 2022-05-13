@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  main:
+    image: hello-world
+    volumes:
+      - main-data:/var/lib/my-app-data
+
+  migrate:
+    image: alpine:latest
+    volumes:
+      - ./scripts:/scripts
+      - ./archive:/archive
+      - main-data:/data
+    command: ["sleep", "infinity"]
+
+volumes:
+  main-data:

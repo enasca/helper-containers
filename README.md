@@ -1,2 +1,3 @@
-# helper-containers
-Helper container samples
+# Helper containers
+
+Helper container templates.
