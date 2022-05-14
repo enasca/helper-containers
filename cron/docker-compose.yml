@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  main:
+    image: hello-world
+
+  cron:
+    image: debian:latest
+    environment:
+      USER_UID: ${USER_UID:-1000}
+      USER_GID: ${USER_GID:-1000}
+    volumes:
+      - ./scripts:/scripts
+      - ./crontab:/etc/cron.d/userjob
+    entrypoint: ["/scripts/entrypoint.sh"]

@@ -1,0 +1,6 @@
+# Environment variables for the cron job must be defined here as Cron does not
+# inherit the user's environment.
+VAR=value
+
+# Every day at 04:15
+15 4  * * *    containeruser    /scripts/job.sh
