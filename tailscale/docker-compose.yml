@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  # The main service will be accessible from the Tailscale network.
+  nginx:
+    image: nginx:latest
+
+    # Set the no_proxy environment variable so that communication to nodes in
+    # the Tailscale network and other private IP ranges are not routed
+    # through an http proxy. For details on the Tailscale address space, see
+    # https://tailscale.com/kb/1015/100.x-addresses/
+    # Note that not many programs support the address block syntax for the
+    # no_proxy variable. If this service only needs to communicate with
+    # Tailscale, it's best to disable proxies altogether with no_proxy='*'.
+    environment:
+      no_proxy: 100.64.0.0/10,127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+
+    # Instead of exposing ports to the host, let Tailscale handle the routing.
+    network_mode: service:tailscale
+
+  tailscaled:
+    image: tailscale/tailscale:latest
+
+    volumes:
+      # Allow the container to use the host TUN device.
+      - /dev/net/tun:/dev/net/tun
+      # Set up persistent storage for Tailscale.
+      - tailscale-data:/var/lib/tailscale
+
+    command: ["tailscaled"]
+
+    cap_add:
+      - net_admin
+
+volumes:
+  tailscale-data:
