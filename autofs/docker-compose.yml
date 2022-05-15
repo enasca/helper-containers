@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  main:
+    image: hello-world
+    volumes:
+      - main-data:/var/lib/my-app-data
+
+  backup:
+    image: debian:latest
+    environment:
+      USER_UID: ${USER_UID:-1000}
+      USER_GID: ${USER_GID:-1000}
+      MOUNTPOINT: ${MOUNTPOINT:?undefined autofs mountpoint}
+    volumes:
+      - main-data:/data
+      - ./scripts:/scripts
+      # The autofs root needs to be configured with "shared" bind propagation
+      # to keep the autofs mountpoints in sync between host and container.
+      - ${AUTOFS_ROOT:?undefined autofs root}:/autofs:shared
+    entrypoint: ["/scripts/entrypoint.sh"]
+    depends_on:
+      - main
+
+volumes:
+  main-data:
