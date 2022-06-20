@@ -9,7 +9,7 @@ services:
     environment:
       USER_UID: ${USER_UID:-1000}
       USER_GID: ${USER_GID:-1000}
+      SCHEDULE: ${SCHEDULE:-15 4 * * *}
     volumes:
       - ./scripts:/scripts
-      - ./crontab:/etc/cron.d/userjob
     entrypoint: ["/scripts/entrypoint.sh"]

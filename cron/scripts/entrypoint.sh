@@ -9,6 +9,9 @@ groupdel containeruser 2> /dev/null
 groupadd --gid "$USER_GID" containeruser \
 	&& useradd --no-log-init --uid "$USER_UID" --gid containeruser containeruser
 
+# Add the cron schedule.
+echo "$SCHEDULE    containeruser    /scripts/job.sh" >> /etc/crontab
+
 # Start syslogd. Log messages from cron will appear at /var/log/syslog.
 service rsyslog start
 

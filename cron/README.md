@@ -13,10 +13,19 @@ USER_GID=$(id -g)
 EOF
 ```
 
-Modify the `crontab` file by editing the schedule as needed.
-Environment variables for the cron job must be defined in this file as Cron does not inherit the user's environment.
+Define the SCHEDULE variable using cron syntax.
+For example:
 
-Launch the Compose:
+```sh
+cat >> .env <<EOF
+SCHEDULE='15 4 * * *'
+EOF
+```
+
+Add a custom script at `scripts/job.sh`.
+Note that `cron` does not inherit environment variables from the shell or from startup files such as `~/.profile`.
+
+Finally, launch the Compose:
 
 ```sh
 docker compose up --detach
