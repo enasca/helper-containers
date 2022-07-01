@@ -11,13 +11,15 @@ services:
     environment:
       USER_UID: ${USER_UID:-1000}
       USER_GID: ${USER_GID:-1000}
-      MOUNTPOINT: ${MOUNTPOINT:?undefined autofs mountpoint}
+      BACKUPDEST: ${BACKUPDEST:?undefined target directory}
     volumes:
       - main-data:/data
       - ./scripts:/scripts
-      # The autofs root needs to be configured with "shared" bind propagation
-      # to keep the autofs mountpoints in sync between host and container.
-      - ${AUTOFS_ROOT:?undefined autofs root}:/autofs:shared
+      # Binding directly to $MOUNTPOINT/$BACKUPDEST fails if root can't browse
+      # up to that level due to restrictions on the remote filesystem.
+      # Binding to $MOUNTPOINT has a better chance of working since the
+      # directory must exist on the host.
+      - ${MOUNTPOINT:?undefined mountpoint}:/mountpoint
     entrypoint: ["/scripts/entrypoint.sh"]
     depends_on:
       - main

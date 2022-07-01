@@ -1,7 +1,7 @@
 # Backup to autofs
 
-A sidecar container which shares a volume with the main service and archives it to an autofs remote destination.
-The container assumes that the autofs setup is done by the host, therefore the destination will simply appear upon access.
+A sidecar container which shares a volume with the main service and archives it to a remote filesystem mounted on the host.
+The container assumes that the mountpoint is already set up.
 
 ## Getting started
 
